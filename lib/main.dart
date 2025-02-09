@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'screens/login_screen.dart';
 import 'screens/signup_screen.dart';
 import 'screens/welcome_screen.dart';
+import 'models/user.dart';
 
 void main() {
   runApp(MyApp());
@@ -20,7 +21,7 @@ class MyApp extends StatelessWidget {
       ),
       initialRoute: '/login', // Set the initial screen (e.g., Welcome screen)
       routes: {
-        '/': (context) => WelcomeScreen(),  // Welcome screen
+        '/': (context) => WelcomeScreen(user: User(email: '', password: '', fullName: '', phone: '')),  // Placeholder user// Welcome screen
         '/login': (context) => LoginScreen(), // Login screen
         '/signup': (context) => SignupScreen(), // Sign-up screen
       },

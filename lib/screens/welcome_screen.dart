@@ -1,11 +1,38 @@
 import 'package:flutter/material.dart';
+import 'login_screen.dart';
+import '../models/user.dart';
+import '../widgets/custom_button.dart';
+import '../services/secure_storage_service.dart';
 
 class WelcomeScreen extends StatelessWidget {
-  const WelcomeScreen({super.key});
+  
+  final User user;
+  final SecureStorageService _storageService = SecureStorageService();
+
+  WelcomeScreen({super.key, required this.user});
+
+
+  void _logout(BuildContext context) async {
+    
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (context) => LoginScreen()),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+         appBar: AppBar(
+        title: Text('Welcome'),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.logout),
+            onPressed: () => _logout(context),
+          ),
+        ],
+      ),
+
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
@@ -53,16 +80,24 @@ class WelcomeScreen extends StatelessWidget {
                       children: [
                         SizedBox(height: 100),
                         Text(
-                          'Welcome to Our App!',
+                              'Welcome ${user.fullName} to ',
                           style: TextStyle(fontSize: 24, color: Color(0xFFFFD700)), // Custom gold color
                         ),
-                        SizedBox(height: 10),
-                        ElevatedButton(
-                          onPressed: () {
-                            // Navigate to next screen
-                          },
-                          child: Text('Get Started'),
+                        SizedBox(height: 5),
+
+                         Text(
+                              'HelloSuper stars Family!',
+                          style: TextStyle(fontSize: 24, color: Color(0xFFFFD700)), // Custom gold color
                         ),
+                        SizedBox(height: 20),
+                        
+
+
+                        CustomButton(
+                          text: 'Log Out',
+                          onPressed: ()=> _logout(context),
+                        ),
+                        
                       ],
                     ),
                   ],

@@ -3,6 +3,7 @@ import '../widgets/input_field.dart';
 import '../widgets/custom_button.dart';
 import 'signup_screen.dart';
 import '../services/secure_storage_service.dart';
+import '../models/user.dart';
 import 'welcome_screen.dart';	
 
 
@@ -23,15 +24,46 @@ class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController _passwordController = TextEditingController();
 
 
+  void _showLoadingDialog() {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return Dialog(
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                CircularProgressIndicator(),
+                SizedBox(width: 16),
+                Text("Loading..."),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
 
-  void _login() async {
-    String? storedPassword = await _secureStorageService.readSecureData(_emailController.text);
-    if (storedPassword == _passwordController.text) {
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => WelcomeScreen()),
-      );
+
+
+ void _login() async {
+    _showLoadingDialog();
+    User? user = await _secureStorageService.readUserData(_emailController.text);
+
+    if (user != null && user.password == _passwordController.text) {
+      Future.delayed(Duration(seconds: 1), () {
+
+        Navigator.pop(context);
+
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => WelcomeScreen(user: user)),
+        );
+      });
     } else {
+        Navigator.pop(context);
       // Show error message
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Invalid email or password')),

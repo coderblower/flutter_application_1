@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import '../widgets/input_field.dart';
 import '../widgets/custom_button.dart';
 import '../services/secure_storage_service.dart';
+import '../models/user.dart';
+import 'login_screen.dart';
 
 
 class SignupScreen extends StatefulWidget {
@@ -24,7 +26,7 @@ class _SignupScreenState extends State<SignupScreen> {
   final TextEditingController _confirmPasswordController = TextEditingController();
 
 
-  void _signup() async {
+  void _signup(BuildContext context) async {
 
 
  
@@ -40,15 +42,28 @@ class _SignupScreenState extends State<SignupScreen> {
       return;
     }
 
-    await _storageService.writeSecureData(
-      _emailController.text, 
-      _passwordController.text,
+
+      User user = User(
+      email: _emailController.text,
+      password: _passwordController.text,
+      fullName: _fullNameController.text,
+      phone: _phoneController.text,
     );
+
+   await _storageService.writeUserData(user);
 
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(content: Text('Signup successful')),
     );
-    
+
+      Future.delayed(Duration(seconds: 1), () {
+        // Navigate to LoginScreen after delay
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => LoginScreen()),
+        );
+      });
+
   }
 
    @override
@@ -180,7 +195,7 @@ class _SignupScreenState extends State<SignupScreen> {
                               CustomButton(
                                 text: 'Sign Up',
                                 
-                                onPressed: _signup
+                                onPressed: ()=> _signup(context),
                               ),
                               SizedBox(height: 20),
                               Text(

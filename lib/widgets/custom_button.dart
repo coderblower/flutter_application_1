@@ -16,11 +16,35 @@ class CustomButton extends StatelessWidget {
       width: 200, // Set the button to take the full width of its parent
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
-          backgroundColor: Color(0xFFFFD700), // Set button color to gold
-          foregroundColor: Colors.black, // Set text color to black
+          padding: EdgeInsets.zero, // Remove default padding
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(8.0), // Rounded corners
+          ),
         ),
         onPressed: onPressed,
-        child: Text(text),
+        child: Ink(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              colors: [Color.fromARGB(255, 240, 189, 5), Color(0xFFD69E2E)], // Gradient colors
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+            ),
+            borderRadius: BorderRadius.circular(8.0),
+          ),
+          child: Container(
+            alignment: Alignment.center,
+            constraints: BoxConstraints(
+              minHeight: 50, // Minimum height of the button
+            ),
+            child: Text(
+              text,
+              style: TextStyle(
+                color: Colors.black, // Set text color to black
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+        ),
       ),
     );
   }

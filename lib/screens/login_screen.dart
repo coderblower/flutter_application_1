@@ -2,9 +2,44 @@ import 'package:flutter/material.dart';
 import '../widgets/input_field.dart';
 import '../widgets/custom_button.dart';
 import 'signup_screen.dart';
+import '../services/secure_storage_service.dart';
+import 'welcome_screen.dart';	
 
-class LoginScreen extends StatelessWidget {
+
+
+class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
+
+  @override
+  _LoginScreenState createState() => _LoginScreenState();
+}
+
+
+
+class _LoginScreenState extends State<LoginScreen> {
+
+  final SecureStorageService _secureStorageService = SecureStorageService();    
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+
+
+
+  void _login() async {
+    String? storedPassword = await _secureStorageService.readSecureData(_emailController.text);
+    if (storedPassword == _passwordController.text) {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => WelcomeScreen()),
+      );
+    } else {
+      // Show error message
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Invalid email or password')),
+      );
+    }
+  }
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -75,6 +110,7 @@ class LoginScreen extends StatelessWidget {
                                       hintText: 'Enter your emails',
                                       obscureText: false,
                                       icon: Icons.lock, // Password icon
+                                      controller: _emailController,
                                     ),
                                     SizedBox(height: 15),
                                     InputField(
@@ -82,13 +118,11 @@ class LoginScreen extends StatelessWidget {
                                       hintText: 'Enter your password',
                                       obscureText: true,
                                       icon: Icons.lock, // Password icon
+                                      controller: _passwordController,
                                     ),
-                                    InputField(
-                                      label: 'Password',
-                                      hintText: 'Enter your password',
-                                      obscureText: true,
-                                      icon: Icons.lock, // Password icon
-                                    ),
+                                  
+                                  
+
                                   ],
                                 ),
                               ),
@@ -100,9 +134,10 @@ class LoginScreen extends StatelessWidget {
                                 children: [
                                   CustomButton(
                                     text: 'Login',
-                                    onPressed: () {
+                                    onPressed: _login,
                                       // Handle login logic
-                                    },
+                                      
+                                    
                                   ),
 
                                   SizedBox(height: 20),

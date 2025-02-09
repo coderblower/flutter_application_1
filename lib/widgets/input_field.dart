@@ -5,6 +5,7 @@ class InputField extends StatelessWidget {
   final String hintText;
   final bool obscureText;
   final IconData icon;
+  final TextEditingController? controller;
 
   const InputField({
     super.key,
@@ -12,6 +13,7 @@ class InputField extends StatelessWidget {
     required this.hintText,
     this.obscureText = false,
     this.icon = Icons.email, // Default icon
+    this.controller,
   });
 
   @override
@@ -27,6 +29,7 @@ class InputField extends StatelessWidget {
           ),
           SizedBox(height: 8.0), // Add some space between the label and the TextField
           TextField(
+            controller: controller,
             obscureText: obscureText,
             style: TextStyle(color: Colors.white), // Set input text color to white
             decoration: InputDecoration(
@@ -49,6 +52,6 @@ class InputField extends StatelessWidget {
       ),
     );
 
-    debugPrint('Obscure text: $obscureText');
+
   }
 }

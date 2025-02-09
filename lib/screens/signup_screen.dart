@@ -1,9 +1,66 @@
 import 'package:flutter/material.dart';
 import '../widgets/input_field.dart';
 import '../widgets/custom_button.dart';
+import '../services/secure_storage_service.dart';
 
-class SignupScreen extends StatelessWidget {
+
+class SignupScreen extends StatefulWidget {
   const SignupScreen({super.key});
+
+  @override
+  _SignupScreenState createState() => _SignupScreenState();
+}
+
+
+
+
+class _SignupScreenState extends State<SignupScreen> {
+
+  final SecureStorageService _storageService = SecureStorageService();
+  final TextEditingController _fullNameController = TextEditingController();
+  final TextEditingController _phoneController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _confirmPasswordController = TextEditingController();
+
+
+  void _signup() async {
+
+
+ 
+
+    print(_fullNameController.text);	
+    print(_phoneController.text);
+
+
+    if (_passwordController.text != _confirmPasswordController.text) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Passwords do not match')),
+      );
+      return;
+    }
+
+    await _storageService.writeSecureData(
+      _emailController.text, 
+      _passwordController.text,
+    );
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text('Signup successful')),
+    );
+    
+  }
+
+   @override
+  void dispose() {
+    _fullNameController.dispose();
+    _phoneController.dispose();
+    _emailController.dispose();
+    _passwordController.dispose();
+    _confirmPasswordController.dispose();
+    super.dispose();
+  }
+  
 
   @override
   Widget build(BuildContext context) {
@@ -84,18 +141,21 @@ class SignupScreen extends StatelessWidget {
                                       label: 'Full Name',
                                       hintText: 'Enter your full name',
                                       icon: Icons.person, // Full Name icon
+                                      controller: _fullNameController,
                                     ),
                                     SizedBox(height: 15),
                                     InputField(
                                       label: 'Phone',
                                       hintText: 'Enter your phone number',
                                       icon: Icons.phone, // Phone icon
+                                      controller: _phoneController,
                                     ),
                                     SizedBox(height: 15),
                                     InputField(
                                       label: 'Email',
                                       hintText: 'Enter your email',
                                       icon: Icons.email, // Email icon
+                                      controller: _emailController,
                                     ),
                                     SizedBox(height: 15),
                                     InputField(
@@ -103,6 +163,7 @@ class SignupScreen extends StatelessWidget {
                                       hintText: 'Enter your password',
                                       obscureText: true,
                                       icon: Icons.lock, // Password icon
+                                      controller: _passwordController,
                                     ),
                                     SizedBox(height: 15),
                                     InputField(
@@ -110,6 +171,7 @@ class SignupScreen extends StatelessWidget {
                                       hintText: 'Confirm your password',
                                       obscureText: true,
                                       icon: Icons.lock, // Confirm Password icon
+                                      controller: _confirmPasswordController,
                                     ),
                                   ],
                                 ),
@@ -118,9 +180,7 @@ class SignupScreen extends StatelessWidget {
                               CustomButton(
                                 text: 'Sign Up',
                                 
-                                onPressed: () {
-                                  // Handle sign up logic
-                                },
+                                onPressed: _signup
                               ),
                               SizedBox(height: 20),
                               Text(

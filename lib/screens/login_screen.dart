@@ -72,10 +72,17 @@ class LoginScreen extends StatelessWidget {
                                   children: [
                                     InputField(
                                       label: 'Email',
-                                      hintText: 'Enter your email',
-                                      icon: Icons.email, // Email icon
+                                      hintText: 'Enter your emails',
+                                      obscureText: false,
+                                      icon: Icons.lock, // Password icon
                                     ),
                                     SizedBox(height: 15),
+                                    InputField(
+                                      label: 'Password',
+                                      hintText: 'Enter your password',
+                                      obscureText: true,
+                                      icon: Icons.lock, // Password icon
+                                    ),
                                     InputField(
                                       label: 'Password',
                                       hintText: 'Enter your password',

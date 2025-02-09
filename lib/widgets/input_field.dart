@@ -7,12 +7,12 @@ class InputField extends StatelessWidget {
   final IconData icon;
 
   const InputField({
-    Key? key,
+    super.key,
     required this.label,
     required this.hintText,
     this.obscureText = false,
     this.icon = Icons.email, // Default icon
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -43,9 +43,12 @@ class InputField extends StatelessWidget {
                 borderSide: BorderSide(color: Color(0xFFB8860B)), // Set focused border color to gold
               ),
             ),
+            keyboardType: obscureText ? TextInputType.text: TextInputType.emailAddress, // Set keyboard type to email
           ),
         ],
       ),
     );
+
+    debugPrint('Obscure text: $obscureText');
   }
 }
